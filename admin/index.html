@@ -23,6 +23,9 @@
   .tag-nao{background:#FCEBEC;color:var(--error);}
   #login-box{max-width:380px;margin:60px auto;}
   .count-info{font-size:13px;color:var(--muted);}
+  .module-tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .module-tab{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:#fff;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);}
+  .module-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 </style>
 </head>
 <body>
@@ -56,23 +59,21 @@
 <main class="wide hidden" id="panel-view">
   <div class="card">
     <div class="top-actions">
-      <h1 class="page-title" style="margin:0;">Contato - Grandes Clientes</h1>
+      <h1 class="page-title" style="margin:0;" id="module-title">Contato - Grandes Clientes</h1>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-outline" id="btn-refresh">Atualizar</button>
         <button class="btn btn-outline" id="btn-logout">Sair</button>
       </div>
     </div>
 
+    <div class="module-tabs">
+      <button class="module-tab active" id="tab-grandes-clientes" data-modulo="grandes_clientes">Contato - Grandes Clientes</button>
+      <button class="module-tab" id="tab-segunda-via" data-modulo="segunda_via">Registro Segunda Via</button>
+    </div>
+
     <div class="toolbar">
-      <input type="text" id="filtro-busca" placeholder="Buscar por nome ou telefone...">
-      <select id="filtro-assunto">
-        <option value="">Todos os assuntos</option>
-        <option value="debitos_negociacao">Débitos e negociação</option>
-        <option value="consumo_alto">Consumo alto</option>
-        <option value="erro_leitura">Erro de leitura</option>
-        <option value="revisao_cadastral">Revisão cadastral</option>
-        <option value="outros">Outros</option>
-      </select>
+      <input type="text" id="filtro-busca" placeholder="Buscar...">
+      <select id="filtro-assunto"></select>
       <input type="date" id="filtro-data-ini">
       <input type="date" id="filtro-data-fim">
       <button class="btn btn-navy" id="btn-xlsx">Exportar XLSX</button>
@@ -84,22 +85,7 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>Data/Hora</th>
-            <th>Ligação</th>
-            <th>Nome do cliente</th>
-            <th>Assunto</th>
-            <th>Obs. assunto</th>
-            <th>Contato c/ sucesso</th>
-            <th>Problema sanado</th>
-            <th>Obs. problema</th>
-            <th>Negociou débito</th>
-            <th>Valor negociado</th>
-            <th>OS aberta</th>
-            <th>Nº OS</th>
-            <th>Observações gerais</th>
-            <th>Registrado por</th>
-          </tr>
+          <tr id="tabela-head"></tr>
         </thead>
         <tbody id="tabela-body"></tbody>
       </table>
