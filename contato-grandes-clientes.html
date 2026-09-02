@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contato - Grandes Clientes · Rio+ Saneamento</title>
+<title>Contato com Cliente · Rio+ Saneamento</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -19,14 +19,25 @@
 
 <main>
   <div class="card">
-    <h1 class="page-title">Contato com Clientes</h1>
+    <h1 class="page-title">Contato com Cliente</h1>
     <p class="page-sub">Preencha todos os campos referentes à ligação realizada.</p>
 
     <form id="form-contato">
 
       <div class="field">
         <label for="ligacao_cliente">1. Ligação do cliente <span class="required">*</span></label>
-        <input type="tel" id="ligacao_cliente" required placeholder="Ex: (21) 90000-0000">
+        <input
+          type="tel"
+          id="ligacao_cliente"
+          required
+          inputmode="numeric"
+          pattern="130\d{7}"
+          maxlength="10"
+          placeholder="Ex: 1300000000"
+          title="Deve começar com 130 e ter 10 dígitos no total">
+        <div id="ligacao-erro" class="status-msg err hidden" style="margin-top:6px;padding:8px 10px;font-size:12px;">
+          O número deve começar com 130 e ter 10 dígitos no total (ex: 1300000000).
+        </div>
       </div>
 
       <div class="field">
@@ -146,6 +157,29 @@ document.querySelectorAll('input[name="os_aberta"]').forEach(el => {
   });
 });
 
+// ---- Validação do campo "Ligação do cliente" (formato 130XXXXXXX) ----
+const inputLigacao = document.getElementById('ligacao_cliente');
+const ligacaoErro = document.getElementById('ligacao-erro');
+
+function ligacaoValida(valor) {
+  return /^130\d{7}$/.test(valor);
+}
+
+inputLigacao.addEventListener('input', () => {
+  // mantém só dígitos, limita a 10
+  let v = inputLigacao.value.replace(/\D/g, '').slice(0, 10);
+  inputLigacao.value = v;
+  ligacaoErro.classList.add('hidden');
+});
+
+inputLigacao.addEventListener('blur', () => {
+  if (inputLigacao.value && !ligacaoValida(inputLigacao.value)) {
+    ligacaoErro.classList.remove('hidden');
+  } else {
+    ligacaoErro.classList.add('hidden');
+  }
+});
+
 const form = document.getElementById('form-contato');
 const statusEl = document.getElementById('status');
 const btnEnviar = document.getElementById('btn-enviar');
@@ -158,6 +192,13 @@ function showStatus(msg, ok) {
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  if (!ligacaoValida(inputLigacao.value)) {
+    ligacaoErro.classList.remove('hidden');
+    inputLigacao.focus();
+    return;
+  }
+
   btnEnviar.disabled = true;
   btnEnviar.textContent = 'Enviando...';
 
