@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel · Atendimento · Rio+ Saneamento</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  main.wide{max-width:1100px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+  th{background:#F0F4F7;color:var(--navy);position:sticky;top:0;font-size:12px;}
+  .table-wrap{overflow:auto;max-height:65vh;border:1px solid var(--border);border-radius:8px;}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .toolbar input, .toolbar select{width:auto;padding:9px 10px;}
+  .btn{padding:10px 16px;border-radius:8px;border:none;font-weight:700;font-size:13px;cursor:pointer;}
+  .btn-teal{background:var(--teal);color:#fff;}
+  .btn-navy{background:var(--navy);color:#fff;}
+  .btn-outline{background:#fff;border:1px solid var(--border);color:var(--ink);}
+  .top-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
+  .tag{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;}
+  .tag-sim{background:#E7F7F0;color:var(--green);}
+  .tag-nao{background:#FCEBEC;color:var(--error);}
+  #login-box{max-width:380px;margin:60px auto;}
+  .count-info{font-size:13px;color:var(--muted);}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Rio+</div>
+    <div class="title">
+      <strong>Rio+ Saneamento</strong>
+      <span>Painel de Atendimento</span>
+    </div>
+  </div>
+</header>
+
+<main id="login-view">
+  <div class="card" id="login-box">
+    <h1 class="page-title">Login do operador</h1>
+    <p class="page-sub">Acesse com seu e-mail e senha cadastrados.</p>
+    <div class="field">
+      <label for="login-email">E-mail</label>
+      <input type="text" id="login-email" placeholder="seu.email@riomaissaneamento.com.br">
+    </div>
+    <div class="field">
+      <label for="login-senha">Senha</label>
+      <input type="text" id="login-senha" type="password" placeholder="Sua senha">
+    </div>
+    <button class="submit" id="btn-login">Entrar</button>
+    <div id="login-status" class="status-msg hidden"></div>
+  </div>
+</main>
+
+<main class="wide hidden" id="panel-view">
+  <div class="card">
+    <div class="top-actions">
+      <h1 class="page-title" style="margin:0;">Contato - Grandes Clientes</h1>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline" id="btn-refresh">Atualizar</button>
+        <button class="btn btn-outline" id="btn-logout">Sair</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="filtro-busca" placeholder="Buscar por nome ou telefone...">
+      <select id="filtro-assunto">
+        <option value="">Todos os assuntos</option>
+        <option value="debitos_negociacao">Débitos e negociação</option>
+        <option value="consumo_alto">Consumo alto</option>
+        <option value="erro_leitura">Erro de leitura</option>
+        <option value="revisao_cadastral">Revisão cadastral</option>
+        <option value="outros">Outros</option>
+      </select>
+      <input type="date" id="filtro-data-ini">
+      <input type="date" id="filtro-data-fim">
+      <button class="btn btn-navy" id="btn-xlsx">Exportar XLSX</button>
+      <button class="btn btn-outline" id="btn-csv">Exportar CSV</button>
+    </div>
+
+    <p class="count-info" id="count-info">Carregando...</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Ligação</th>
+            <th>Nome do cliente</th>
+            <th>Assunto</th>
+            <th>Obs. assunto</th>
+            <th>Contato c/ sucesso</th>
+            <th>Problema sanado</th>
+            <th>Obs. problema</th>
+            <th>Negociou débito</th>
+            <th>Valor negociado</th>
+            <th>OS aberta</th>
+            <th>Nº OS</th>
+            <th>Observações gerais</th>
+            <th>Registrado por</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-body"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="../js/supabaseClient.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

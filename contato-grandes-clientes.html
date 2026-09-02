@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato - Grandes Clientes · Rio+ Saneamento</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Rio+</div>
+    <div class="title">
+      <strong>Rio+ Saneamento</strong>
+      <span>Atendimento</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <h1 class="page-title">Contato - Grandes Clientes</h1>
+    <p class="page-sub">Preencha todos os campos referentes à ligação realizada.</p>
+
+    <form id="form-contato">
+
+      <div class="field">
+        <label for="ligacao_cliente">1. Ligação do cliente <span class="required">*</span></label>
+        <input type="tel" id="ligacao_cliente" required placeholder="Ex: (21) 90000-0000">
+      </div>
+
+      <div class="field">
+        <label for="nome_cliente">2. Nome do cliente <span class="required">*</span></label>
+        <input type="text" id="nome_cliente" required placeholder="Nome completo">
+      </div>
+
+      <div class="field">
+        <label for="assunto">3. O que foi tratado neste contato? <span class="required">*</span></label>
+        <select id="assunto" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="debitos_negociacao">Débitos e negociação</option>
+          <option value="consumo_alto">Consumo alto</option>
+          <option value="erro_leitura">Erro de leitura</option>
+          <option value="revisao_cadastral">Revisão cadastral</option>
+          <option value="outros">Outros</option>
+        </select>
+        <div class="conditional">
+          <label for="assunto_observacao">Observação</label>
+          <textarea id="assunto_observacao" placeholder="Detalhe o assunto tratado, se necessário"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>4. Houve sucesso no contato com o cliente? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="contato_sucesso" value="sim" required> Sim</label>
+          <label><input type="radio" name="contato_sucesso" value="nao"> Não</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>5. O problema do cliente foi sanado? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="problema_sanado" value="sim" required> Sim</label>
+          <label><input type="radio" name="problema_sanado" value="nao"> Não</label>
+        </div>
+        <div class="conditional">
+          <label for="problema_sanado_obs">Observação</label>
+          <textarea id="problema_sanado_obs" placeholder="Detalhe, se necessário"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>6. Houve negociação de débitos? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="negociacao_debito" value="sim" required> Sim</label>
+          <label><input type="radio" name="negociacao_debito" value="nao"> Não</label>
+        </div>
+        <div id="wrap-valor-negociado" class="conditional hidden">
+          <label for="valor_negociado">Se sim, qual valor negociado? <span class="required">*</span></label>
+          <input type="number" step="0.01" min="0" id="valor_negociado" placeholder="R$ 0,00">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>7. Foi aberta Ordem de Serviço para a ligação? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="os_aberta" value="sim" required> Sim</label>
+          <label><input type="radio" name="os_aberta" value="nao"> Não</label>
+        </div>
+        <div id="wrap-os-numero" class="conditional hidden">
+          <label for="os_numero">Insira o número da Ordem de Serviço <span class="required">*</span></label>
+          <input type="text" id="os_numero" placeholder="Número da OS">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="observacoes_gerais">8. Observações gerais <span class="required">*</span></label>
+        <textarea id="observacoes_gerais" required placeholder="Descreva observações gerais sobre o atendimento"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="registrado_por">Registrado por (seu nome)</label>
+        <input type="text" id="registrado_por" placeholder="Opcional">
+      </div>
+
+      <button type="submit" class="submit" id="btn-enviar">Enviar registro</button>
+      <div id="status" class="status-msg hidden"></div>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script>
+const wrapValor = document.getElementById('wrap-valor-negociado');
+const inputValor = document.getElementById('valor_negociado');
+const wrapOs = document.getElementById('wrap-os-numero');
+const inputOs = document.getElementById('os_numero');
+
+document.querySelectorAll('input[name="negociacao_debito"]').forEach(el => {
+  el.addEventListener('change', () => {
+    const sim = el.value === 'sim' && el.checked;
+    if (sim) {
+      wrapValor.classList.remove('hidden');
+      inputValor.setAttribute('required', 'required');
+    } else if (el.checked) {
+      wrapValor.classList.add('hidden');
+      inputValor.removeAttribute('required');
+      inputValor.value = '';
+    }
+  });
+});
+
+document.querySelectorAll('input[name="os_aberta"]').forEach(el => {
+  el.addEventListener('change', () => {
+    const sim = el.value === 'sim' && el.checked;
+    if (sim) {
+      wrapOs.classList.remove('hidden');
+      inputOs.setAttribute('required', 'required');
+    } else if (el.checked) {
+      wrapOs.classList.add('hidden');
+      inputOs.removeAttribute('required');
+      inputOs.value = '';
+    }
+  });
+});
+
+const form = document.getElementById('form-contato');
+const statusEl = document.getElementById('status');
+const btnEnviar = document.getElementById('btn-enviar');
+
+function showStatus(msg, ok) {
+  statusEl.textContent = msg;
+  statusEl.classList.remove('hidden', 'ok', 'err');
+  statusEl.classList.add(ok ? 'ok' : 'err');
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btnEnviar.disabled = true;
+  btnEnviar.textContent = 'Enviando...';
+
+  const payload = {
+    ligacao_cliente: document.getElementById('ligacao_cliente').value.trim(),
+    nome_cliente: document.getElementById('nome_cliente').value.trim(),
+    assunto: document.getElementById('assunto').value,
+    assunto_observacao: document.getElementById('assunto_observacao').value.trim() || null,
+    contato_sucesso: document.querySelector('input[name="contato_sucesso"]:checked')?.value === 'sim',
+    problema_sanado: document.querySelector('input[name="problema_sanado"]:checked')?.value === 'sim',
+    problema_sanado_obs: document.getElementById('problema_sanado_obs').value.trim() || null,
+    negociacao_debito: document.querySelector('input[name="negociacao_debito"]:checked')?.value === 'sim',
+    valor_negociado: inputValor.value ? parseFloat(inputValor.value) : null,
+    os_aberta: document.querySelector('input[name="os_aberta"]:checked')?.value === 'sim',
+    os_numero: inputOs.value.trim() || null,
+    observacoes_gerais: document.getElementById('observacoes_gerais').value.trim(),
+    registrado_por: document.getElementById('registrado_por').value.trim() || null
+  };
+
+  const { error } = await supabaseClient.from('contato_grandes_clientes').insert(payload);
+
+  if (error) {
+    showStatus('Erro ao enviar: ' + error.message, false);
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar registro';
+  } else {
+    showStatus('Registro enviado com sucesso!', true);
+    form.reset();
+    wrapValor.classList.add('hidden');
+    wrapOs.classList.add('hidden');
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar registro';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+:root{
+  --navy:#003D67;
+  --navy-dark:#012C4D;
+  --teal:#00A896;
+  --amber:#E0A100;
+  --green:#1E8E5A;
+  --error:#C6363C;
+  --bg:#F4F6F8;
+  --card:#FFFFFF;
+  --ink:#1B2B36;
+  --muted:#5C7080;
+  --border:#DDE4E9;
+  font-size:16px;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  line-height:1.5;
+}
+
+header.topbar{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+  color:#fff;
+  padding:22px 20px;
+}
+
+header.topbar .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  max-width:880px;
+  margin:0 auto;
+}
+
+header.topbar .logo{
+  font-weight:800;
+  font-size:22px;
+  letter-spacing:-0.02em;
+  background:#fff;
+  color:var(--navy);
+  padding:4px 10px;
+  border-radius:6px;
+}
+
+header.topbar .title{
+  display:flex;
+  flex-direction:column;
+}
+
+header.topbar .title strong{
+  font-size:17px;
+  font-weight:700;
+}
+
+header.topbar .title span{
+  font-size:13px;
+  color:#BFD9EA;
+}
+
+main{
+  max-width:640px;
+  margin:0 auto;
+  padding:24px 16px 60px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:22px;
+  margin-bottom:16px;
+}
+
+h1.page-title{
+  font-size:20px;
+  margin:0 0 4px;
+  color:var(--navy);
+}
+
+p.page-sub{
+  color:var(--muted);
+  margin:0 0 20px;
+  font-size:14px;
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+.field label{
+  display:block;
+  font-weight:600;
+  font-size:14px;
+  margin-bottom:6px;
+  color:var(--ink);
+}
+
+.field .required{
+  color:var(--error);
+}
+
+input[type=text],
+input[type=tel],
+input[type=number],
+select,
+textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-size:16px;
+  font-family:inherit;
+  background:#fff;
+  color:var(--ink);
+}
+
+textarea{
+  resize:vertical;
+  min-height:70px;
+}
+
+input:focus,select:focus,textarea:focus{
+  outline:2px solid var(--teal);
+  outline-offset:1px;
+  border-color:var(--teal);
+}
+
+.radio-group{
+  display:flex;
+  gap:10px;
+}
+
+.radio-group label{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:11px 8px;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  background:#fff;
+}
+
+.radio-group input{
+  accent-color:var(--teal);
+}
+
+.radio-group label:has(input:checked){
+  border-color:var(--teal);
+  background:#E7F7F4;
+  color:#0B5E52;
+}
+
+.conditional{
+  margin-top:10px;
+  padding-left:2px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+button.submit{
+  width:100%;
+  background:var(--teal);
+  color:#fff;
+  border:none;
+  padding:14px;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:6px;
+}
+
+button.submit:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+button.submit:hover:not(:disabled){
+  background:#008E7E;
+}
+
+.status-msg{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.status-msg.ok{
+  background:#E7F7F0;
+  color:var(--green);
+  border:1px solid #BEE8D2;
+}
+
+.status-msg.err{
+  background:#FCEBEC;
+  color:var(--error);
+  border:1px solid #F3C6CA;
+}
+
+.hub-grid{
+  display:grid;
+  gap:14px;
+}
+
+.hub-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px;
+  transition:border-color .15s;
+}
+
+.hub-card:hover{
+  border-color:var(--teal);
+}
+
+.hub-card h2{
+  margin:0 0 4px;
+  font-size:17px;
+  color:var(--navy);
+}
+
+.hub-card p{
+  margin:0;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.hub-card .badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  padding:3px 8px;
+  border-radius:20px;
+  margin-top:8px;
+}
+
+.badge.ativo{
+  background:#E7F7F4;
+  color:#0B5E52;
+}
+
+.badge.em-breve{
+  background:#F0F2F4;
+  color:var(--muted);
+}
+
+.small-note{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:24px;
+}
