@@ -10,6 +10,7 @@ const MOTIVO_LABEL = {
   nao_recebeu: 'Não recebeu',
   perdeu: 'Perdeu',
   nao_conseguiu_acesso_digital: 'Não conseguiu acesso digital',
+  refaturamento_conta: 'Refaturamento de conta',
   outro: 'Outro'
 };
 
@@ -27,7 +28,7 @@ function formatarData(iso) {
 const MODULOS = {
   grandes_clientes: {
     tabela: 'contato_grandes_clientes',
-    titulo: 'Contato - Grandes Clientes',
+    titulo: 'Contato com Cliente',
     arquivoBase: 'contato-grandes-clientes',
     filtroAssuntoOptions: [
       ['', 'Todos os assuntos'],
@@ -67,6 +68,7 @@ const MODULOS = {
       ['nao_recebeu', 'Não recebeu'],
       ['perdeu', 'Perdeu'],
       ['nao_conseguiu_acesso_digital', 'Não conseguiu acesso digital'],
+      ['refaturamento_conta', 'Refaturamento de conta'],
       ['outro', 'Outro']
     ],
     filtroAssuntoCampo: 'motivo',
