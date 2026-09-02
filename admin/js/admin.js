@@ -88,9 +88,11 @@ const MODULOS = {
 
 let moduloAtual = 'grandes_clientes';
 let registros = [];
+let modoSenhaForcado = false;
 
 const loginView = document.getElementById('login-view');
 const panelView = document.getElementById('panel-view');
+const forcePasswordView = document.getElementById('force-password-view');
 const loginStatus = document.getElementById('login-status');
 
 function showLoginStatus(msg) {
@@ -99,16 +101,35 @@ function showLoginStatus(msg) {
   loginStatus.classList.add('err');
 }
 
+function esconderTudo() {
+  loginView.classList.add('hidden');
+  panelView.classList.add('hidden');
+  forcePasswordView.classList.add('hidden');
+}
+
 async function checkSession() {
   const { data } = await supabaseClient.auth.getSession();
   if (data.session) {
-    loginView.classList.add('hidden');
+    const { data: userData } = await supabaseClient.auth.getUser();
+    const precisaTrocar = userData?.user?.user_metadata?.deve_trocar_senha === true;
+
+    if (precisaTrocar) {
+      esconderTudo();
+      modoSenhaForcado = true;
+      document.getElementById('btn-cancelar-senha').classList.add('hidden');
+      document.querySelector('#force-password-view .page-sub').textContent =
+        'Este é seu primeiro acesso. Escolha uma senha nova antes de continuar.';
+      forcePasswordView.classList.remove('hidden');
+      return;
+    }
+
+    esconderTudo();
     panelView.classList.remove('hidden');
     aplicarConfigModulo();
     await carregarDados();
   } else {
+    esconderTudo();
     loginView.classList.remove('hidden');
-    panelView.classList.add('hidden');
   }
 }
 
@@ -126,6 +147,62 @@ document.getElementById('btn-login').addEventListener('click', async () => {
 document.getElementById('btn-logout').addEventListener('click', async () => {
   await supabaseClient.auth.signOut();
   await checkSession();
+});
+
+document.getElementById('btn-trocar-senha').addEventListener('click', () => {
+  esconderTudo();
+  modoSenhaForcado = false;
+  document.getElementById('btn-cancelar-senha').classList.remove('hidden');
+  document.querySelector('#force-password-view .page-sub').textContent =
+    'Escolha sua nova senha.';
+  document.getElementById('nova-senha').value = '';
+  document.getElementById('confirmar-senha').value = '';
+  document.getElementById('force-password-status').classList.add('hidden');
+  forcePasswordView.classList.remove('hidden');
+});
+
+document.getElementById('btn-cancelar-senha').addEventListener('click', async () => {
+  await checkSession();
+});
+
+function showForcePasswordStatus(msg, ok) {
+  const el = document.getElementById('force-password-status');
+  el.textContent = msg;
+  el.classList.remove('hidden', 'ok', 'err');
+  el.classList.add(ok ? 'ok' : 'err');
+}
+
+document.getElementById('btn-definir-senha').addEventListener('click', async () => {
+  const novaSenha = document.getElementById('nova-senha').value;
+  const confirmarSenha = document.getElementById('confirmar-senha').value;
+
+  if (!novaSenha || novaSenha.length < 6) {
+    showForcePasswordStatus('A senha precisa ter no mínimo 6 caracteres.', false);
+    return;
+  }
+  if (novaSenha !== confirmarSenha) {
+    showForcePasswordStatus('As senhas não coincidem.', false);
+    return;
+  }
+
+  const btn = document.getElementById('btn-definir-senha');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+
+  const { error } = await supabaseClient.auth.updateUser({
+    password: novaSenha,
+    data: { deve_trocar_senha: false }
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Definir senha e entrar';
+
+  if (error) {
+    showForcePasswordStatus('Erro ao salvar: ' + error.message, false);
+  } else {
+    showForcePasswordStatus('Senha atualizada com sucesso!', true);
+    setTimeout(checkSession, 800);
+  }
 });
 
 document.getElementById('btn-refresh').addEventListener('click', carregarDados);
