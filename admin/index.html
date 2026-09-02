@@ -56,12 +56,31 @@
   </div>
 </main>
 
+<main id="force-password-view" class="hidden">
+  <div class="card" id="force-password-box" style="max-width:380px;margin:60px auto;">
+    <h1 class="page-title">Defina sua senha</h1>
+    <p class="page-sub">Este é seu primeiro acesso. Escolha uma senha nova antes de continuar.</p>
+    <div class="field">
+      <label for="nova-senha">Nova senha</label>
+      <input type="password" id="nova-senha" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="field">
+      <label for="confirmar-senha">Confirmar nova senha</label>
+      <input type="password" id="confirmar-senha" placeholder="Repita a nova senha">
+    </div>
+    <button class="submit" id="btn-definir-senha">Definir senha e entrar</button>
+    <button class="btn btn-outline hidden" id="btn-cancelar-senha" style="width:100%;margin-top:8px;">Cancelar</button>
+    <div id="force-password-status" class="status-msg hidden"></div>
+  </div>
+</main>
+
 <main class="wide hidden" id="panel-view">
   <div class="card">
     <div class="top-actions">
       <h1 class="page-title" style="margin:0;" id="module-title">Contato - Grandes Clientes</h1>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-outline" id="btn-refresh">Atualizar</button>
+        <button class="btn btn-outline" id="btn-trocar-senha">Alterar senha</button>
         <button class="btn btn-outline" id="btn-logout">Sair</button>
       </div>
     </div>
