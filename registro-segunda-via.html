@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Segunda Via · Rio+ Saneamento</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Rio+</div>
+    <div class="title">
+      <strong>Rio+ Saneamento</strong>
+      <span>Atendimento</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <h1 class="page-title">Formulário de Atendimento — 2ª Via</h1>
+    <p class="page-sub">Sua resposta nos ajuda a melhorar nosso atendimento.</p>
+
+    <form id="form-segunda-via">
+
+      <div class="field">
+        <label for="matricula">Matrícula <span class="required">*</span></label>
+        <input type="text" id="matricula" required placeholder="Número da matrícula">
+      </div>
+
+      <div class="field">
+        <label for="nome_titular">Nome do titular <span class="required">*</span></label>
+        <input type="text" id="nome_titular" required placeholder="Nome completo">
+      </div>
+
+      <div class="field">
+        <label for="motivo">1. Motivo da retirada da 2ª via <span class="required">*</span></label>
+        <select id="motivo" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="nao_recebeu">Não recebeu</option>
+          <option value="perdeu">Perdeu</option>
+          <option value="nao_conseguiu_acesso_digital">Não conseguiu acesso digital</option>
+          <option value="outro">Outro</option>
+        </select>
+        <div class="conditional">
+          <label for="motivo_observacao">Observação <span class="required">*</span></label>
+          <textarea id="motivo_observacao" required placeholder="Detalhe o motivo"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" placeholder="Ex: (21) 90000-0000">
+      </div>
+
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="text" id="email" placeholder="seuemail@exemplo.com">
+      </div>
+
+      <div class="field">
+        <label>2. Aceita receber a conta digital por e-mail? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="aceita_conta_digital" value="sim" required> Sim</label>
+          <label><input type="radio" name="aceita_conta_digital" value="nao"> Não</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>3. Auxílio na instalação e/ou acesso ao APP? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="auxilio_instalacao_app" value="sim" required> Sim</label>
+          <label><input type="radio" name="auxilio_instalacao_app" value="nao"> Não</label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit" id="btn-enviar">Enviar registro</button>
+      <div id="status" class="status-msg hidden"></div>
+    </form>
+  </div>
+  <p class="small-note">Obrigado pela colaboração!</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseClient.js"></script>
+<script>
+const form = document.getElementById('form-segunda-via');
+const statusEl = document.getElementById('status');
+const btnEnviar = document.getElementById('btn-enviar');
+
+function showStatus(msg, ok) {
+  statusEl.textContent = msg;
+  statusEl.classList.remove('hidden', 'ok', 'err');
+  statusEl.classList.add(ok ? 'ok' : 'err');
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btnEnviar.disabled = true;
+  btnEnviar.textContent = 'Enviando...';
+
+  const payload = {
+    matricula: document.getElementById('matricula').value.trim(),
+    nome_titular: document.getElementById('nome_titular').value.trim(),
+    motivo: document.getElementById('motivo').value,
+    motivo_observacao: document.getElementById('motivo_observacao').value.trim() || null,
+    telefone: document.getElementById('telefone').value.trim() || null,
+    email: document.getElementById('email').value.trim() || null,
+    aceita_conta_digital: document.querySelector('input[name="aceita_conta_digital"]:checked')?.value === 'sim',
+    auxilio_instalacao_app: document.querySelector('input[name="auxilio_instalacao_app"]:checked')?.value === 'sim'
+  };
+
+  const { error } = await supabaseClient.from('registro_segunda_via').insert(payload);
+
+  if (error) {
+    showStatus('Erro ao enviar: ' + error.message, false);
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar registro';
+  } else {
+    showStatus('Registro enviado com sucesso!', true);
+    form.reset();
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar registro';
+  }
+});
+</script>
+</body>
+</html>
