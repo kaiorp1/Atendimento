@@ -6,6 +6,14 @@ const ASSUNTO_LABEL = {
   outros: 'Outros'
 };
 
+const MOTIVO_NAO_NEGOCIADO_LABEL = {
+  cliente_nao_quis_negociar: 'Cliente não quis negociar',
+  cliente_sem_condicoes_pagamento: 'Cliente não tem condições para o pagamento',
+  cliente_aguarda_execucao_os: 'Cliente aguarda execução de OS',
+  cliente_desconhece_debito: 'Cliente desconhece o débito',
+  cliente_intencao_negociar_outro_momento: 'Cliente tem intenção de negociar em outro momento'
+};
+
 const MOTIVO_LABEL = {
   nao_recebeu: 'Não recebeu',
   perdeu: 'Perdeu',
@@ -52,6 +60,7 @@ const MODULOS = {
       { head: 'Obs. problema', get: r => r.problema_sanado_obs || '', exportKey: 'Observação do problema' },
       { head: 'Negociou débito', get: r => simNaoTag(r.negociacao_debito), exportGet: r => r.negociacao_debito ? 'Sim' : 'Não', exportKey: 'Negociou débito' },
       { head: 'Valor negociado', get: r => r.valor_negociado != null ? 'R$ ' + Number(r.valor_negociado).toFixed(2) : '-', exportGet: r => r.valor_negociado != null ? Number(r.valor_negociado) : '', exportKey: 'Valor negociado' },
+      { head: 'Motivo não negociado', get: r => MOTIVO_NAO_NEGOCIADO_LABEL[r.motivo_nao_negociado] || '-', exportGet: r => MOTIVO_NAO_NEGOCIADO_LABEL[r.motivo_nao_negociado] || '', exportKey: 'Motivo não negociado' },
       { head: 'OS aberta', get: r => simNaoTag(r.os_aberta), exportGet: r => r.os_aberta ? 'Sim' : 'Não', exportKey: 'OS aberta' },
       { head: 'Nº OS', get: r => r.os_numero || '-', exportKey: 'Número da OS' },
       { head: 'Observações gerais', get: r => r.observacoes_gerais || '', exportKey: 'Observações gerais' },
