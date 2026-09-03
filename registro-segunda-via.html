@@ -46,17 +46,7 @@
 
       <div class="field">
         <label for="registrado_por">Nome do colaborador <span class="required">*</span></label>
-        <select id="registrado_por" required>
-          <option value="" disabled selected>Selecione</option>
-          <option value="Estela">Estela</option>
-          <option value="Simone">Simone</option>
-          <option value="Eliana">Eliana</option>
-          <option value="Roberta">Roberta</option>
-          <option value="Marielen">Marielen</option>
-          <option value="Lohana">Lohana</option>
-          <option value="Jennifer">Jennifer</option>
-          <option value="Francisco">Francisco</option>
-        </select>
+        <input type="text" id="registrado_por" required placeholder="Seu nome completo">
       </div>
 
       <div class="field">
@@ -130,7 +120,7 @@ form.addEventListener('submit', async (e) => {
     matricula: document.getElementById('matricula').value.trim(),
     nome_titular: document.getElementById('nome_titular').value.trim(),
     cidade: document.getElementById('cidade').value,
-    registrado_por: document.getElementById('registrado_por').value,
+    registrado_por: document.getElementById('registrado_por').value.trim(),
     motivo: document.getElementById('motivo').value,
     motivo_observacao: document.getElementById('motivo_observacao').value.trim() || null,
     telefone: document.getElementById('telefone').value.trim() || null,
