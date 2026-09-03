@@ -35,6 +35,31 @@
       </div>
 
       <div class="field">
+        <label for="cidade">Cidade <span class="required">*</span></label>
+        <select id="cidade" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="Itaguaí">Itaguaí</option>
+          <option value="Seropédica">Seropédica</option>
+          <option value="Paracambi">Paracambi</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="registrado_por">Nome do colaborador <span class="required">*</span></label>
+        <select id="registrado_por" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="Estela">Estela</option>
+          <option value="Simone">Simone</option>
+          <option value="Eliana">Eliana</option>
+          <option value="Roberta">Roberta</option>
+          <option value="Marielen">Marielen</option>
+          <option value="Lohana">Lohana</option>
+          <option value="Jennifer">Jennifer</option>
+          <option value="Francisco">Francisco</option>
+        </select>
+      </div>
+
+      <div class="field">
         <label for="motivo">1. Motivo da retirada da 2ª via <span class="required">*</span></label>
         <select id="motivo" required>
           <option value="" disabled selected>Selecione</option>
@@ -104,6 +129,8 @@ form.addEventListener('submit', async (e) => {
   const payload = {
     matricula: document.getElementById('matricula').value.trim(),
     nome_titular: document.getElementById('nome_titular').value.trim(),
+    cidade: document.getElementById('cidade').value,
+    registrado_por: document.getElementById('registrado_por').value,
     motivo: document.getElementById('motivo').value,
     motivo_observacao: document.getElementById('motivo_observacao').value.trim() || null,
     telefone: document.getElementById('telefone').value.trim() || null,
