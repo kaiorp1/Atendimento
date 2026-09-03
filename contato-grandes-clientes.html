@@ -152,25 +152,43 @@ const inputOs = document.getElementById('os_numero');
 const wrapMotivoNaoNegociado = document.getElementById('wrap-motivo-nao-negociado');
 const inputMotivoNaoNegociado = document.getElementById('motivo_nao_negociado');
 
-document.querySelectorAll('input[name="negociacao_debito"]').forEach(el => {
-  el.addEventListener('change', () => {
-    const sim = el.value === 'sim' && el.checked;
-    const nao = el.value === 'nao' && el.checked;
+function updateNegociacaoConditional() {
+  const negociacaoChecked = document.querySelector('input[name="negociacao_debito"]:checked');
+  const contatoSucessoChecked = document.querySelector('input[name="contato_sucesso"]:checked');
 
-    if (sim) {
-      wrapValor.classList.remove('hidden');
-      inputValor.setAttribute('required', 'required');
+  const sim = negociacaoChecked?.value === 'sim';
+  const nao = negociacaoChecked?.value === 'nao';
+  const contatoFoiSemSucesso = contatoSucessoChecked?.value === 'nao';
+
+  if (sim) {
+    wrapValor.classList.remove('hidden');
+    inputValor.setAttribute('required', 'required');
+    wrapMotivoNaoNegociado.classList.add('hidden');
+    inputMotivoNaoNegociado.removeAttribute('required');
+    inputMotivoNaoNegociado.value = '';
+  } else if (nao) {
+    wrapValor.classList.add('hidden');
+    inputValor.removeAttribute('required');
+    inputValor.value = '';
+
+    if (contatoFoiSemSucesso) {
+      // Contato já não teve sucesso: não faz sentido pedir o motivo de não ter negociado
       wrapMotivoNaoNegociado.classList.add('hidden');
       inputMotivoNaoNegociado.removeAttribute('required');
       inputMotivoNaoNegociado.value = '';
-    } else if (nao) {
-      wrapValor.classList.add('hidden');
-      inputValor.removeAttribute('required');
-      inputValor.value = '';
+    } else {
       wrapMotivoNaoNegociado.classList.remove('hidden');
       inputMotivoNaoNegociado.setAttribute('required', 'required');
     }
-  });
+  }
+}
+
+document.querySelectorAll('input[name="negociacao_debito"]').forEach(el => {
+  el.addEventListener('change', updateNegociacaoConditional);
+});
+
+document.querySelectorAll('input[name="contato_sucesso"]').forEach(el => {
+  el.addEventListener('change', updateNegociacaoConditional);
 });
 
 document.querySelectorAll('input[name="os_aberta"]').forEach(el => {
